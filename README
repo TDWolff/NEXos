@@ -1,8 +1,0 @@
-# Running The Docker Container
-
-## First Run:
-docker build buildenv nexos-buildenv
-
-## Then Run:
-Windows:        docker run --rm -it -v %cd%:/root/env/ nexos-buildenv
-Linux or MacOS: docker run --rm -it -v $pwd:/root/env/ nexos-buildenv
