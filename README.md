@@ -29,7 +29,7 @@ To leave the build environment, enter `exit`.
 
 You can emulate your operating system using [Qemu](https://www.qemu.org/): (Don't forget to [add qemu to your path](https://dev.to/whaleshark271/using-qemu-on-windows-10-home-edition-4062#:~:text=2.-,Add%20Qemu%20path%20to%20environment%20variables%20settings,-Copy%20the%20Qemu)!)
 
- - `qemu-system-x86_64 -m 1048 -cdrom /Users/torinwolff/Documents/GitHub/NEXos/dist/x86_64/kernel.iso`
+ - `qemu-system-x86_64 -m 1048 -cdrom dist/x86_64/kernel.iso`
  - Note: Close the emulator when finished, so as to not block writing to `kernel.iso` for future builds.
 
 If the above command fails, try one of the following:
