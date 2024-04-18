@@ -42,3 +42,27 @@ char keyboard_read_char() {
 
     return ascii_char;
 }
+
+
+// input detection for nano
+
+char read_char() {
+    unsigned char scan_code;
+    char ascii_char;
+
+    while (!(inb(0x64) & 0x1)) {}
+
+    scan_code = inb(KEYBOARD_DATA_PORT);
+
+    if (scan_code == 0x0E) {
+        return '\b'; // Backspace/delete key
+    }
+
+    if (scan_code > 128) {
+        return 0;
+    }
+
+    ascii_char = SCAN_CODE_TO_ASCII[scan_code];
+
+    return ascii_char;
+}

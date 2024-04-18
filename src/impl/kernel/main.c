@@ -1,5 +1,7 @@
 #include "print.h"
 #include "shell.h"
+#include "filesystem.h"
+#include "mem.h"
 
 void kernel_main() {
     print_clear();
@@ -7,4 +9,6 @@ void kernel_main() {
     print_str("Welcome to NEX operating system!");
     print_newline();
     shell_loop();
+    mem_init();
+    fs_init();
 }

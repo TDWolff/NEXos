@@ -1,4 +1,5 @@
 #include "print.h"
+#include <stdint.h>
 
 const static size_t NUM_COLS = 80;
 const static size_t NUM_ROWS = 25;
@@ -102,6 +103,11 @@ void print_str(char* str) {
 
         print_char(character);
     }
+}
+
+void print_int(char* str) {
+// take in a float/int/var from another function and print it to the screen
+    print_str(str);
 }
 
 void print_set_color(uint8_t foreground, uint8_t background) {

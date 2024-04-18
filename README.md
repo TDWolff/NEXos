@@ -1,11 +1,3 @@
-# Write Your Own 64-bit Operating System Kernel From Scratch
-
-This respository holds all the source code for [this YouTube tutorial series](https://www.youtube.com/playlist?list=PLZQftyCk7_SeZRitx5MjBKzTtvk0pHMtp).
-
-You can find the revision for a specific episode on [this page](https://github.com/davidcallanan/yt-os-series/tags).
-
-Considering supporting this work via [my Patreon page](http://patreon.com/codepulse).
-
 ## Prerequisites
 
  - A text editor such as [VS Code](https://code.visualstudio.com/).
@@ -37,7 +29,7 @@ To leave the build environment, enter `exit`.
 
 You can emulate your operating system using [Qemu](https://www.qemu.org/): (Don't forget to [add qemu to your path](https://dev.to/whaleshark271/using-qemu-on-windows-10-home-edition-4062#:~:text=2.-,Add%20Qemu%20path%20to%20environment%20variables%20settings,-Copy%20the%20Qemu)!)
 
- - `qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso`
+ - `qemu-system-x86_64 -m 1048 -cdrom /Users/torinwolff/Documents/GitHub/NEXos/dist/x86_64/kernel.iso`
  - Note: Close the emulator when finished, so as to not block writing to `kernel.iso` for future builds.
 
 If the above command fails, try one of the following:
@@ -51,3 +43,60 @@ Alternatively, you should be able to load the operating system on a USB drive an
 
 Remove the build-evironment image:
  - `docker rmi myos-buildenv -f`
+
+
+## Contributing
+[TDWolff](https://github.com/TDWolff)
+
+## Placecholder code
+```c
+typedef struct {
+    char name[11];
+    unsigned char attr;
+    unsigned char nt_res;
+    unsigned char crt_time_tenth;
+    unsigned short crt_time;
+    unsigned short crt_date;
+    unsigned short lst_acc_date;
+    unsigned short fst_clus_hi;
+    unsigned short wrt_time;
+    unsigned short wrt_date;
+    unsigned short fst_clus_lo;
+    unsigned int file_size;
+} __attribute__((packed)) dir_entry_t;
+
+typedef struct {
+    unsigned char jmp[3];
+    char oem[8];
+    unsigned short bytes_per_sector;
+    unsigned char sectors_per_cluster;
+    unsigned short reserved_sectors;
+    unsigned char number_of_fats;
+    unsigned short root_dir_entries;
+    unsigned short total_sectors_short; // if zero, later field is used
+    unsigned char media_descriptor;
+    unsigned short fat_size_sectors;
+    unsigned short sectors_per_track;
+    unsigned short number_of_heads;
+    unsigned int hidden_sectors;
+    unsigned int total_sectors_long;
+
+    unsigned int table_size;
+    unsigned short extended_flags;
+    unsigned short fat_version;
+    unsigned int root_cluster;
+    unsigned short fat_info;
+    unsigned short backup_BS_sector;
+    unsigned char reserved_0[12];
+    unsigned char drive_number;
+    unsigned char reserved_1;
+    unsigned char boot_signature;
+    unsigned int volume_id;
+    char volume_label[11];
+    char fat_type_label[8];
+} __attribute__((packed)) fat32_BS_struct_t;
+```
+
+
+## Current Issues
+ - Need to implement dynamic memory as the current memory allocation is static and the nano command is running into max memory used errors.
