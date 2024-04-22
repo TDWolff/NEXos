@@ -99,4 +99,59 @@ typedef struct {
 
 
 ## Current Issues
- - Need to implement dynamic memory as the current memory allocation is static and the nano command is running into max memory used errors.
+```
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+root@8585bd4fc0eb:~/env# make build-x86_64
+mkdir -p build/kernel/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/kernel/main.c -o build/kernel/main.o
+src/impl/kernel/main.c: In function 'kernel_main':
+src/impl/kernel/main.c:12:5: warning: implicit declaration of function 'mem_init' [-Wimplicit-function-declaration]
+   12 |     mem_init();
+      |     ^~~~~~~~
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/print.c -o build/x86_64/print.o
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/io.c -o build/x86_64/io.o
+src/impl/x86_64/io.c: In function 'sprintf':
+src/impl/x86_64/io.c:59:5: warning: implicit declaration of function 'va_start' [-Wimplicit-function-declaration]
+   59 |     va_start(args, format);
+      |     ^~~~~~~~
+src/impl/x86_64/io.c:60:5: warning: implicit declaration of function 'vsprintf'; did you mean 'sprintf'? [-Wimplicit-function-declaration]
+   60 |     vsprintf(str, format, args);
+      |     ^~~~~~~~
+      |     sprintf
+src/impl/x86_64/io.c:61:5: warning: implicit declaration of function 'va_end' [-Wimplicit-function-declaration]
+   61 |     va_end(args);
+      |     ^~~~~~
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/keyboard.c -o build/x86_64/keyboard.o
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/mem.c -o build/x86_64/mem.o
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/string.c -o build/x86_64/string.o
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/filesystem.c -o build/x86_64/filesystem.o
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/disk.c -o build/x86_64/disk.o
+mkdir -p build/x86_64/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/x86_64/md.c -o build/x86_64/md.o
+mkdir -p build/x86_64/boot/ && \
+nasm -f elf64  src/impl/x86_64/boot/main.asm -o build/x86_64/boot/main.o
+mkdir -p build/x86_64/boot/ && \
+nasm -f elf64  src/impl/x86_64/boot/main64.asm -o build/x86_64/boot/main64.o
+mkdir -p build/x86_64/boot/ && \
+nasm -f elf64  src/impl/x86_64/boot/header.asm -o build/x86_64/boot/header.o
+mkdir -p build/shell/ && \
+x86_64-elf-gcc -c -I src/intf -ffreestanding  src/impl/shell/shell.c -o build/shell/shell.o
+mkdir -p dist/x86_64 && \
+x86_64-elf-ld -n -o dist/x86_64/kernel.bin -T targets/x86_64/linker.ld  build/kernel/main.o  build/x86_64/print.o  build/x86_64/io.o  build/x86_64/keyboard.o  build/x86_64/mem.o  build/x86_64/string.o  build/x86_64/filesystem.o  build/x86_64/disk.o  build/x86_64/md.o  build/x86_64/boot/main.o  build/x86_64/boot/main64.o  build/x86_64/boot/header.o  build/shell/shell.o && \
+cp dist/x86_64/kernel.bin targets/x86_64/iso/boot/kernel.bin && \
+grub-mkrescue /usr/lib/grub/i386-pc -o dist/x86_64/kernel.iso targets/x86_64/iso
+x86_64-elf-ld: warning: dist/x86_64/kernel.bin has a LOAD segment with RWX permissions
+x86_64-elf-ld: build/x86_64/io.o: in function `sprintf':
+io.c:(.text+0x1f3): undefined reference to `va_start'
+x86_64-elf-ld: io.c:(.text+0x218): undefined reference to `vsprintf'
+x86_64-elf-ld: io.c:(.text+0x22c): undefined reference to `va_end'
+make: *** [Makefile:33: build-x86_64] Error 1
+root@8585bd4fc0eb:~/env# 
+```
